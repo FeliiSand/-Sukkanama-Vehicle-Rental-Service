@@ -1,0 +1,14 @@
+CREATE DATABASE IF NOT EXISTS register;
+
+USE register;
+
+CREATE TABLE IF NOT EXISTS form (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fname VARCHAR(22),
+    lname VARCHAR(22),
+    gender VARCHAR(22),
+    cnum VARCHAR(22),
+    address VARCHAR(22),
+    email VARCHAR(22),
+    pass VARCHAR(22)
+);

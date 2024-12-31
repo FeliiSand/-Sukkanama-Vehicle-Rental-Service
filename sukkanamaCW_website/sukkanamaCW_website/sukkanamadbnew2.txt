@@ -1,0 +1,94 @@
+CREATE DATABASE IF NOT EXISTS sukkanamaDB;
+USE sukkanamaDB;
+
+-- Drop the table 'User' if it already exists
+DROP TABLE IF EXISTS User;
+
+CREATE TABLE User (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    f_name VARCHAR(255),
+    l_name VARCHAR(255),
+    email VARCHAR(255),
+    nic VARCHAR(12),
+    reg_date DATE,
+    u_name VARCHAR(50) UNIQUE,
+    p_word VARCHAR(255),
+    tel_no VARCHAR(20),
+    user_type ENUM('supplier', 'customer', 'admin') DEFAULT 'customer'
+);
+
+CREATE TABLE Customer (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    d_licen VARCHAR(20) UNIQUE,
+    FOREIGN KEY (user_id) REFERENCES User(user_id)
+);
+
+CREATE TABLE Supplier (
+    supplier_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    tax_id VARCHAR(20) UNIQUE,
+    FOREIGN KEY (user_id) REFERENCES User(user_id)
+);
+
+CREATE TABLE Admin (
+    admin_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES User(user_id)
+);
+
+CREATE TABLE Vehicle (
+    vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
+    plate VARCHAR(20),
+    eng_capacity INT,
+    t_mission ENUM('Auto', 'Manual'),
+    brand ENUM('Audi', 'BMW', 'Daihatsu', 'Dimo', 'Ford', 'Honda', 'Hyundai', 'Isuzu', 'Jeep', 'KIA', 'Mazda', 'Benze', 'Mitsubishi', 'Nissan', 'Perodua', 'suzuki', 'Toyota', 'Micro'),
+    model VARCHAR(50),
+    no_of_doors ENUM('1', '2', '3', '4', '5'),
+    f_type ENUM('Petrol', 'Diesel', 'Hybrid', 'Electric'),
+    yom ENUM('2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'),
+    color VARCHAR(50),
+    seat_capacity INT,
+    per_day_chrg DECIMAL(10, 2),
+    description TEXT,
+    supplier_id INT,
+    FOREIGN KEY (supplier_id) REFERENCES Supplier(supplier_id)
+);
+
+CREATE TABLE Rent (
+    rent_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT,
+    vehicle_id INT,
+    s_date DATE,
+    s_time TIME,
+    r_date DATE,
+    r_time TIME,
+    status VARCHAR(50),
+    cost DECIMAL(10, 2),
+    FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
+    FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id)
+);
+
+CREATE TABLE Rate (
+    rate_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT,
+    supplier_id INT,
+    feedback TEXT,
+    time DATETIME,
+    date DATE,
+    created_by VARCHAR(255),
+    FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
+    FOREIGN KEY (supplier_id) REFERENCES Supplier(supplier_id)
+);
+
+CREATE TABLE VehiclePhotos (
+    photo_id INT AUTO_INCREMENT PRIMARY KEY,
+    vehicle_id INT,
+    photo_filename VARCHAR(255),
+    FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id)
+);
+
+ALTER TABLE Vehicle MODIFY COLUMN brand VARCHAR(255);
+ALTER TABLE Vehicle ADD COLUMN user_id INT;
+
+
